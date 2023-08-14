@@ -29,9 +29,7 @@ function App() {
           </Nav>
         </Container>
       </Navbar>
-
-
-
+    
 
       <Routes>
 
@@ -48,9 +46,11 @@ function App() {
           </>
         } />
 
-        <Route path="/detail" element={
-          <>
-            <Detail></Detail>
+        <Route path="/detail/:itemId" element={
+          // :id is url parameter
+          <>{
+            <Detail shoes={shoes}></Detail>
+          }
           </>
         } />
 
