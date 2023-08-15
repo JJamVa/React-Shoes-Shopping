@@ -12,14 +12,15 @@ import About from './Component/AboutComponent';
 import axios from 'axios';
 import { useEffect } from 'react';
 import Cart from './Component/CartComponent';
+import { useQuery } from '@tanstack/react-query';
 
 export let Context = createContext()
 
 function App() {
 
   useEffect(() => {
-    localStorage.setItem('watched',JSON.stringify([]))
-  },[])
+    localStorage.setItem('watched', JSON.stringify([]))
+  }, [])
   // let obj = {name: 'park'}
   // localStorage.setItem('data', JSON.stringify(obj))
   // let a = localStorage.getItem('data')
@@ -31,6 +32,14 @@ function App() {
 
   let navigate = useNavigate(); // 페이지 이동을 도와주는 함수
 
+  let result = useQuery(['키'], () =>
+    axios.get('https://codingapple1.github.io/userdata.json').then((a) => {
+      return a.data
+    }),
+    {staleTime: 2000}//refetch 타임
+  );
+  console.log(result)
+
 
   return (
     <div className="App">
@@ -41,8 +50,13 @@ function App() {
             <Nav.Link onClick={() => navigate("./")}>Home</Nav.Link>
             <Nav.Link onClick={() => navigate('./detail/0')}>Detail</Nav.Link>
             <Nav.Link onClick={() => navigate('./cart')}>Cart</Nav.Link>
-            {/* <Link to="/">홈</Link>
-            <Link to="/detail">상세페이지</Link> */}
+          </Nav>
+          <Nav className="ms-auto">
+            <Nav.Link>
+              {result.isLoading && "Loading..."}
+              {result.error && "Error"}
+              {result.data && result.data.name + "님 환영합니다."}
+            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -85,7 +99,7 @@ function App() {
         <Route path="/detail/:itemId" element={
           // :id is url parameter
           <>{
-            <Context.Provider value={{stock}}>
+            <Context.Provider value={{ stock }}>
               <Detail shoes={shoes}></Detail>
             </Context.Provider>
           }
@@ -93,13 +107,11 @@ function App() {
         } />
 
         <Route path="/about" element={<About></About>} />
-        <Route path="/cart" element={<Cart></Cart>}/>
+        <Route path="/cart" element={<Cart></Cart>} />
 
 
-
-
-        //   {/* nested router */}
-        //   {/* <Route path="/about" element={<About/>}>
+        {/* nested router */}
+        {/* <Route path="/about" element={<About/>}>
         //   <Route path="member" element={<div>인물 정보</div>} />
         //   <Route path="location" element={<div>위치 정보</div>} />
         // </Route> */}

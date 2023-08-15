@@ -5,15 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from 'react-redux';
-import store from './store'
-import { QueryClient, QueryClientProvier } from "react-query"
+import store from './store';
+import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 
 const queryClient = new QueryClient()
 
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <QueryClientProvier client={queryClient}>
+  <QueryClientProvider client={queryClient}>
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter>
@@ -21,7 +20,7 @@ root.render(
         </BrowserRouter>
       </Provider>
     </React.StrictMode>
-  </QueryClientProvier>
+  </QueryClientProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
